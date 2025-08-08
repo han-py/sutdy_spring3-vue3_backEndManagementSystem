@@ -5,6 +5,10 @@
 #### B站视频链接 https://www.bilibili.com/video/BV1Df2cYVEWo/?spm_id_from=333.1387.favlist.content.click&vd_source=fb913aea8f391cf63bd3a7bee690795c
 #### 绿叶学习网 http://www.lvyestudy.com/
 #### 菜鸟教程 https://www.runoob.com/
+#### ---------------------------------------------------------------------------------------------------------------------------------
+#### 配置git代理
+##### git config --global http.proxy http://127.0.0.1:端口号
+##### git config --global https.proxy http://127.0.0.1:端口号
 #### ==========================================================================
 ### 技术栈
 #### 前后端分离
