@@ -34,4 +34,40 @@
 ##### npm i unplugin-element-plus -D
 ##### npm i unplugin-vue-components -D
 #### 配置 index.scss
-#####
+##### @forward "element-plus/theme-chalk/src/common/var.scss" with ($colors: (
+#####   "primary": ("base": #0742b1),
+#####   "success": ("base": #2b8f01),
+#####   "warning": ("base": #ffad00),
+#####   "danger": ("base": #e52f2f),
+#####   "info": ("base": #5e41b8),
+##### ));
+#### 配置 vite.config.js
+##### import AutoImport from 'unplugin-auto-import/vite'
+##### import Components from 'unplugin-vue-components/vite'
+##### import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+##### import ElementPlus from 'unplugin-element-plus/vite'
+
+##### plugins: [
+#####  vue(),
+#####  // 按需定制主题配置
+#####  ElementPlus({
+#####    useSource: true,
+#####  }),
+#####  AutoImport({
+#####    resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
+#####  }),
+#####  Components({
+#####    resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
+#####  }),
+##### ],  
+
+##### css: {
+#####   preprocessorOptions: {
+#####     scss: {
+#####       // 自动导入定制化样式文件进行样式覆盖
+#####       additionalData: `
+#####         @use "@/assets/index.scss" as *;
+#####       `,
+#####     }
+#####   }
+##### },  
