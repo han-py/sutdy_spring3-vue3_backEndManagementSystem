@@ -7,4 +7,7 @@
 
 <script setup>
 
+  const goHome = () => {
+    lacation.href = '/manager';
+  }
 </script>
