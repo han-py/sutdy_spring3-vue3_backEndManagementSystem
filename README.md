@@ -7,6 +7,9 @@
 #### 绿叶学习网 http://www.lvyestudy.com/
 #### 菜鸟教程 https://www.runoob.com/
 #### markdown语法 https://markdown.com.cn/intro.html
+#### 图片取色器 https://www.jyshare.com/front-end/6214/#65ae8f
+#### 找logo就上 https://www.iconfont.cn/
+# !!!注意：在终端进行操作时要注意是不是在对应的文件夹，如不是，及时用cd命令进入对应的文件夹。
 ***
 #### 配置git代理
 ```
