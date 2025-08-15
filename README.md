@@ -27,10 +27,10 @@ git config --global https.proxy http://127.0.0.1:端口号
 #### 必备软件：JDK17 以上版本、IDEA2023 以上版本（旗舰版）、Mysql5.7（不能低于5.7，5.6到5.7有很大变化） 或 8.0、nodejs16 以上版本、 Navicat（数据库可视化工具）
 ***
 ### 笔记
-#### 构建vue工程时只有Router选“是”其他都不要，可以保留示例文件以更快更方便的初始化
-#### Element-Plus国内镜像网址 https://cn.element-plus.org/zh-CN/
+#### 构建 vue 工程时只有 Router 选“是”其他都不要，可以保留示例文件以更快更方便的初始化
+#### Element-Plus 国内镜像网址 https://cn.element-plus.org/zh-CN/
 ***
-#### 安装Element-Plus组件: 
+#### 安装 Element-Plus组件: 
 ```
 cd vue3
 npm i element-plus -s
@@ -98,7 +98,7 @@ export default defineConfig({
 })
 ```
 ***
-### Result类公式：
+### Result 类公式：
 ```
 /**
  * 统一返回的包装类
@@ -172,3 +172,43 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
 ```
+***
+### 分页查询
+#### 引入 pagehelper 插件
+```
+<!-- 分页插件pagehelper -->
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>1.4.6</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+#### 三行代码实现分页查询
+```
+public PageInfo<Employee> selectPage(Integer pageNum, Integer pageSize) {
+    PageHelper.startPage(pageNum, pageSize);
+    List<Employee> list = employeeMapper.selectAll();
+    return PageInfo.of(list);
+}
+```
+#### 分页接口
+```
+/**
+ * 分页查询的数据
+ * pageNum: 当前页码
+ * pageSize: 每页的个数
+ */
+@GetMapping("/selectPage")
+public Result selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
+                         @RequestParam(defaultValue = "10") Integer pageSize) {
+    PageInfo<Employee> pageInfo = employeeService.selectPage(pageNum, pageSize);
+    return Result.success(pageInfo);
+}
+```
+***
