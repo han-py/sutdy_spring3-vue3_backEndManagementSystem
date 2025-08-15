@@ -7,3 +7,12 @@ spring:
       username: root
       password: '932357493'
       driver-class-name: com.mysql.cj.jdbc.Driver
+
+# 配置mybatis实体和xml映射
+mybatis:
+  ## 映射xml
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    # 配置日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
