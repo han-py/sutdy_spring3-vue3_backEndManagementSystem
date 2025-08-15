@@ -5,6 +5,7 @@ import com.example.springboot3.entity.Employee;
 import com.example.springboot3.service.EmpolyeeService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +25,14 @@ public class EmployeeController {
     public Result selectAll() {
         List<Employee> list = empolyeeService.selectAll();
         return Result.success(list);
+    }
+
+    /**
+     * 通过id查询单个数据
+     */
+    @GetMapping("/selectById/{id}")
+    public Result selectById(@PathVariable Integer id) {
+        Employee employee = empolyeeService.selectById(id);
+        return Result.success(employee);
     }
 }

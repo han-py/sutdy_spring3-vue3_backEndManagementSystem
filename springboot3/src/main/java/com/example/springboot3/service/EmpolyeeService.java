@@ -16,4 +16,8 @@ public class EmpolyeeService {
     public List<Employee> selectAll() {
         return employeeMapper.selectAll();
     }
+
+    public Employee selectById(Integer id) {
+        return employeeMapper.selectById(id);
+    }
 }
