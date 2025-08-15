@@ -160,3 +160,15 @@ public class Result {
     }
 }
 ```
+***
+### Springboot 配置 Mybatis （记得要在 resource 下再创建一个 mapper 文件夹）
+```
+# 配置mybatis实体和xml映射
+mybatis:
+  ## 映射xml
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    # 配置日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+```
