@@ -2,7 +2,7 @@ package com.example.springboot3.controller;
 
 import com.example.springboot3.common.Result;
 import com.example.springboot3.entity.Employee;
-import com.example.springboot3.service.EmpolyeeService;
+import com.example.springboot3.service.EmployeeService;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +14,41 @@ import java.util.List;
 public class EmployeeController {
 
     @Resource
-    private EmpolyeeService empolyeeService;
+    private EmployeeService employeeService;
+
+    /**
+     * 添加数据
+     */
+    @PostMapping("/add")
+    public Result add(@RequestBody Employee employee) {
+        employeeService.add(employee);
+        return Result.success();
+    }
+
+    /**
+     * 修改数据
+     */
+    @PutMapping("/update")
+    public Result update(@RequestBody Employee employee) {
+        employeeService.update(employee);
+        return Result.success();
+    }
+
+    /**
+     * 删除数据
+     */
+    @DeleteMapping("/delete/{id}")
+    public Result delete(@PathVariable Integer id) {
+        employeeService.delete(id);
+        return Result.success();
+    }
 
     /**
      * 查询所有的数据
      */
     @GetMapping("/selectAll")
     public Result selectAll() {
-        List<Employee> list = empolyeeService.selectAll();
+        List<Employee> list = employeeService.selectAll();
         return Result.success(list);
     }
 
@@ -30,7 +57,7 @@ public class EmployeeController {
      */
     @GetMapping("/selectById/{id}")
     public Result selectById(@PathVariable Integer id) {
-        Employee employee = empolyeeService.selectById(id);
+        Employee employee = employeeService.selectById(id);
         return Result.success(employee);
     }
 
@@ -42,7 +69,7 @@ public class EmployeeController {
     @GetMapping("/selectPage")
     public Result selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
                              @RequestParam(defaultValue = "10") Integer pageSize) {
-        PageInfo<Employee> pageInfo = empolyeeService.selectPage(pageNum, pageSize);
+        PageInfo<Employee> pageInfo = employeeService.selectPage(pageNum, pageSize);
         return Result.success(pageInfo);
     }
 }

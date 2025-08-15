@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class EmpolyeeService {
+public class EmployeeService {
 
     @Resource
     EmployeeMapper employeeMapper;
@@ -27,5 +27,17 @@ public class EmpolyeeService {
         PageHelper.startPage(pageNum, pageSize);
         List<Employee> list = employeeMapper.selectAll();
         return PageInfo.of(list);
+    }
+
+    public void add(Employee employee) {
+        employeeMapper.insert(employee);
+    }
+
+    public void update(Employee employee) {
+        employeeMapper.updateById(employee);
+    }
+
+    public void delete(Integer id) {
+        employeeMapper.deleteById(id);
     }
 }

@@ -4,6 +4,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.springboot3.mapper.EmployeeMapper">
 
+    <insert id="insert" parameterType="com.example.springboot3.entity.Employee">
+        insert into employee(name,sex,no,age,description,department_id)
+        values(#{name},#{sex},#{no},#{age},#{description},#{departmentId}) // 绑值时要用驼峰的写法
+    </insert>
+
+    <update id="updateById" parameterType="com.example.springboot3.entity.Employee">
+        update employee
+        set name = #{name},
+            sex = #{sex},
+            no = #{no},
+            age = #{age},
+            description = #{description},
+            department_id = #{departmentId}
+        where id = #{id}
+
+    </update>
+
     <select id="selectAll" resultType="com.example.springboot3.entity.Employee">
         select * from employee
     </select>
