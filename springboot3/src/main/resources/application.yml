@@ -2,5 +2,5 @@ spring:
   datasource:
       url: jdbc:mysql://localhost:3306/sutdy_spring3-vue3_backEndManagementSystem_DB
       username: root
-      password: 932357493
+      password: '932357493'
       driver-class-name: com.mysql.cj.jdbc.Driver
