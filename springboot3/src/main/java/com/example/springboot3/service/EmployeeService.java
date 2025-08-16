@@ -15,8 +15,8 @@ public class EmployeeService {
     @Resource
     EmployeeMapper employeeMapper;
 
-    public List<Employee> selectAll() {
-        return employeeMapper.selectAll(null);
+    public List<Employee> selectAll(Employee  employee) {
+        return employeeMapper.selectAll(employee);
     }
 
     public Employee selectById(Integer id) {

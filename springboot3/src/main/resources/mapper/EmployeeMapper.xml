@@ -6,7 +6,7 @@
 
     <insert id="insert" parameterType="com.example.springboot3.entity.Employee">
         insert into employee(name,sex,no,age,description,department_id)
-        values(#{name},#{sex},#{no},#{age},#{description},#{departmentId}) // 绑值时要用驼峰的写法
+        values(#{name},#{sex},#{no},#{age},#{description},#{departmentId}) <!-- 绑值时要用驼峰的写法 -->
     </insert>
 
     <update id="updateById" parameterType="com.example.springboot3.entity.Employee">
@@ -25,9 +25,10 @@
         select * from employee
         <where>
             <if test="name != null">
-                and name like '%${name}%'  // 全模糊查询
+                and name like concat('%', #{name}, '%')  <!-- 全模糊查询 -->
             </if>
         </where>
+        order by id desc
     </select>
 
 </mapper>

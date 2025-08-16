@@ -47,8 +47,8 @@ public class EmployeeController {
      * 查询所有的数据
      */
     @GetMapping("/selectAll")
-    public Result selectAll() {
-        List<Employee> list = employeeService.selectAll();
+    public Result selectAll(Employee employee) {
+        List<Employee> list = employeeService.selectAll(employee);
         return Result.success(list);
     }
 
