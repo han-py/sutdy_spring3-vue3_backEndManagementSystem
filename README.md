@@ -212,3 +212,78 @@ public Result selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
 }
 ```
 ***
+### 安装 axios 封装前后端对接数据工具
+```
+npm i axios -S
+```
+#### 请求的工具类 request.js
+```
+import axios from "axios";
+import {ElMessage} from "element-plus";
+
+const request = axios.create({
+  baseURL: 'http://localhost:9090',
+  timeout: 30000  // 后台接口超时时间
+})
+
+// request 拦截器
+// 可以自请求发送前对请求做一些处理
+request.interceptors.request.use(config => {
+  config.headers['Content-Type'] = 'application/json;charset=utf-8';
+  return config
+}, error => {
+  return Promise.reject(error)
+});
+
+// response 拦截器
+// 可以在接口响应后统一处理结果
+request.interceptors.response.use(
+  response => {
+    let res = response.data;
+    // 兼容服务端返回的字符串数据
+    if (typeof res === 'string') {
+      res = res ? JSON.parse(res) : res
+    }
+    return res;
+  },
+  error => {
+    if (error.response.status === 404) {
+      ElMessage.error('未找到请求接口')
+    } else if (error.response.status === 500) {
+      ElMessage.error('系统异常，请查看后端控制台报错')
+    } else {
+      console.error(error.message)
+    }
+    return Promise.reject(error)
+  }
+)
+
+export default request
+```
+***
+### 在 Springboot 里面设置统一的跨域处理
+```
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+/**
+ * 跨域配置
+ */
+@Configuration
+public class CorsConfig {
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("*"); // 1 设置访问源地址
+        corsConfiguration.addAllowedHeader("*"); // 2 设置访问源请求头
+        corsConfiguration.addAllowedMethod("*"); // 3 设置访问源请求方法
+        source.registerCorsConfiguration("/**", corsConfiguration); // 4 对接口配置跨域设置
+        return new CorsFilter(source);
+    }
+}
+```
