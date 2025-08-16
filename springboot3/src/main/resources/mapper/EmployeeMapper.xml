@@ -25,7 +25,7 @@
         select * from employee
         <where>
             <if test="name != null">
-                and name like '%${name}%'
+                and name like '%${name}%'  // 全模糊查询
             </if>
         </where>
     </select>
