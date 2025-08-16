@@ -43,7 +43,7 @@ public class EmployeeController {
         return Result.success();
     }
 
-    /**
+     /**
      * 查询所有的数据
      */
     @GetMapping("/selectAll")
@@ -67,9 +67,10 @@ public class EmployeeController {
      * pageSize: 每页显示的条数
      */
     @GetMapping("/selectPage")
-    public Result selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
+    public Result selectPage(Employee employee,
+                             @RequestParam(defaultValue = "1") Integer pageNum,
                              @RequestParam(defaultValue = "10") Integer pageSize) {
-        PageInfo<Employee> pageInfo = employeeService.selectPage(pageNum, pageSize);
+        PageInfo<Employee> pageInfo = employeeService.selectPage(employee,pageNum, pageSize);
         return Result.success(pageInfo);
     }
 }

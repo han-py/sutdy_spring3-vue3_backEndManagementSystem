@@ -16,16 +16,16 @@ public class EmployeeService {
     EmployeeMapper employeeMapper;
 
     public List<Employee> selectAll() {
-        return employeeMapper.selectAll();
+        return employeeMapper.selectAll(null);
     }
 
     public Employee selectById(Integer id) {
         return employeeMapper.selectById(id);
     }
 
-    public PageInfo<Employee> selectPage(Integer pageNum, Integer pageSize) {
+    public PageInfo<Employee> selectPage(Employee employee,Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<Employee> list = employeeMapper.selectAll();
+        List<Employee> list = employeeMapper.selectAll(employee);
         return PageInfo.of(list);
     }
 

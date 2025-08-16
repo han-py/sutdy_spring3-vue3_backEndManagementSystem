@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface EmployeeMapper {
-    List<Employee> selectAll();
+    List<Employee> selectAll(Employee employee);
 
     /**
      * 根据id查询员工 使用注解形式查询

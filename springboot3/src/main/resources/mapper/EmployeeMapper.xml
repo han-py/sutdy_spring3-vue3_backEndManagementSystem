@@ -23,6 +23,11 @@
 
     <select id="selectAll" resultType="com.example.springboot3.entity.Employee">
         select * from employee
+        <where>
+            <if test="name != null">
+                and name like '%${name}%'
+            </if>
+        </where>
     </select>
 
 </mapper>
