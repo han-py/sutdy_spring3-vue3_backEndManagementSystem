@@ -74,8 +74,9 @@
 
 <script setup>
 import { reactive } from "vue";
-import { Search } from "@element-plus/icons-vue"
+import {Delete, Edit, Search} from "@element-plus/icons-vue"
 import request from "@/utils/request.js";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 const data = reactive({
   tableData: [],
@@ -147,7 +148,7 @@ const update = () => {
 
 const del = (id) => {
   ElMessageBox.confirm('删除数据后无法恢复，您确认删除吗？', '删除确认', { type: 'warning' }).then(() => {
-    request.delete('/employee/deleteById/' +id).then(res => {
+    request.delete('/employee/delete/' +id).then(res => {
       if (res.code === '200') {
         ElMessage.success('操作成功')
         load()  // 删除后一定要重新加载最新的数据
