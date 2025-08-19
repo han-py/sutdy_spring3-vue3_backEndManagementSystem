@@ -287,3 +287,6 @@ public class CorsConfig {
     }
 }
 ```
+***
+### 注意：MySQL中如果表名是关键字（如employee），需要用反引号(`)而不是单引号(')包围。
+***
