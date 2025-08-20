@@ -14,6 +14,7 @@
     <div class="card" style="margin-bottom: 5px">
       <el-table :data="data.tableData" stripe @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
+        <el-table-column label="账号" prop="username" />
         <el-table-column label="名称" prop="name" />
         <el-table-column label="性别" prop="sex" />
         <el-table-column label="工号" prop="no" />
@@ -41,9 +42,12 @@
       </div>
     </div>
 
-    <el-dialog title="员工信息" v-model="data.formVisible" width="500">
-      <el-form :model="data.form" label-width="80px" style="padding-right: 40px; padding-top: 20px">
-        <el-form-item label="名称">
+    <el-dialog title="员工信息" v-model="data.formVisible" width="500" destroy-on-close>
+      <el-form :model="data.form" :rules = "data.rules" label-width="80px" style="padding-right: 40px; padding-top: 20px">
+        <el-form-item ref = "formRef" label="账号" prop="username">
+          <el-input v-model="data.form.username" autocomplete="off" placeholder="请输入账号" />
+        </el-form-item>
+        <el-form-item label="名称" prop="name">
           <el-input v-model="data.form.name" autocomplete="off" placeholder="请输入名称" />
         </el-form-item>
         <el-form-item label="性别">
@@ -52,7 +56,7 @@
             <el-radio value="女" label="女"></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="工号">
+        <el-form-item label="工号" prop = "no">
           <el-input v-model="data.form.no" autocomplete="off"  placeholder="请输入工号" />
         </el-form-item>
         <el-form-item label="年龄">
@@ -73,7 +77,7 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref} from "vue";
 import {Delete, Edit, Search} from "@element-plus/icons-vue"
 import request from "@/utils/request.js";
 import {ElMessage, ElMessageBox} from "element-plus";
@@ -86,8 +90,15 @@ const data = reactive({
   name: null,  // 用于查询的名称
   formVisible: false,
   form:{},
-  ids: []
+  ids: [],
+  rules:{
+    username:[{ required: true, message: '请输入账号', trigger: 'blur'}],
+    name:[{ required: true, message: '请输入名称', trigger: 'blur'}],
+    no:[{ required: true, message: '请输入工号', trigger: 'blur'}],
+  }
 })
+
+const formRef = ref()
 
 const load = () => {
   request.get('/employee/selectPage', {
@@ -114,7 +125,11 @@ const handleAdd = () => {
 }
 
 const save = () => {
-  data.form.id ? update() : add()
+  formRef.value.validate(valid => {
+    if (valid) {
+      data.form.id ? update() : add()
+    }
+  })
 }
 
 const add = () => {

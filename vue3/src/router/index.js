@@ -10,6 +10,7 @@ const router = createRouter({
         { path: "404", name: "404", meta: { title: "页面不存在" }, component: () => import("../views/404.vue")},
         { path: ':pathMatch(.*)*', redirect: '/404'},
       ] },
+    { path: '/login', name: 'login', meta: { title: '登录页面' }, component: () => import('../views/Login.vue')},
     { path: "/404", name: "404", meta: { title: "页面不存在" }, component: () => import("../views/404.vue")},
     { path: '/:pathMatch(.*)*', redirect: '/404'}
   ],
