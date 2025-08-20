@@ -85,7 +85,7 @@ public class EmployeeController {
 
     @PostMapping("/login")
     public Result login(@RequestBody Employee employee) {
-        employeeService.login(employee);
-        return Result.success();
+        Employee dbemployee = employeeService.login(employee);
+        return Result.success(dbemployee);
     }
 }
