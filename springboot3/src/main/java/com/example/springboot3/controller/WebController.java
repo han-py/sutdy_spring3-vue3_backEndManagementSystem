@@ -13,7 +13,11 @@ import java.util.HashMap;
 
 @RestController
 public class WebController {
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
+
+    public WebController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
     @GetMapping("/hello")
     public String hello() {
