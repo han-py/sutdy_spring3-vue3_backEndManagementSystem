@@ -39,7 +39,7 @@
             <el-icon><UserFilled /></el-icon>
             个人信息
           </el-menu-item>
-          <el-menu-item index="/manager/home">
+          <el-menu-item index="/login">
             <el-icon><SwitchButton /></el-icon>
             退出登录
           </el-menu-item>
