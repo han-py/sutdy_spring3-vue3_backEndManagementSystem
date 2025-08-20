@@ -48,4 +48,10 @@ public class WebController {
         Employee dbemployee = employeeService.login(employee);
         return Result.success(dbemployee);
     }
+
+    @PostMapping("/register")
+    public Result register(@RequestBody Employee employee) {
+        employeeService.add(employee);
+        return Result.success();
+    }
 }

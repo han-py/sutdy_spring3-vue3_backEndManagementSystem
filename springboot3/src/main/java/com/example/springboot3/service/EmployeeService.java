@@ -1,5 +1,6 @@
 package com.example.springboot3.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.example.springboot3.entity.Employee;
 import com.example.springboot3.exception.CustomException;
 import com.example.springboot3.mapper.EmployeeMapper;
@@ -31,6 +32,19 @@ public class EmployeeService {
     }
 
     public void add(Employee employee) {
+        String username = employee.getUsername();  // 账号
+        Employee dbEmployee = employeeMapper.selectByUsername(username);
+        if (dbEmployee != null) {  // 注册的账号已存在  无法注册
+            throw new CustomException("500", "账号已存在，请更换别的账号");
+        }
+        if (StrUtil.isBlank(employee.getPassword())) {  // 密码没填
+            employee.setPassword("123");  // 默认密码 123
+        }
+        if (StrUtil.isBlank(employee.getName())) {  // 名字没填
+            employee.setName(employee.getUsername());  // 默认名称
+        }
+        // 一定要设置角色
+        employee.setRole("EMP");  // 员工的角色
         employeeMapper.insert(employee);
     }
 

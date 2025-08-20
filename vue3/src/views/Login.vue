@@ -13,7 +13,7 @@
           <div style="margin-bottom: 20px">
             <el-button @click="login" size="large" style="width: 100%" type="primary">登 录</el-button>
           </div>
-          <div style="text-align: right">还没有账号？请 <a style="color: #0742b1; text-decoration: none" href="@/views/Register">注册</a></div>
+          <div style="text-align: right">还没有账号？请 <a style="color: #0742b1; text-decoration: none" href="/Register">注册</a></div>
         </el-form>
       </div>
 
