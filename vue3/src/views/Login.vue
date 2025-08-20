@@ -45,7 +45,7 @@ const login = () => {
     if (valid) {
       request.post('/login', data.form).then(res => {
         if (res.code === '200') {  // 登录成功
-          // 存储后台返回的用户数据信息
+          // 存储后台返回的用户数据信息，让主页右上角能显示用户的名称，让网页界面更加合理
           localStorage.setItem('xm-pro-user', JSON.stringify(res.data))  // 把json对象转换成 json字符串存储
           ElMessage.success('登录成功')
           setTimeout(() => {
