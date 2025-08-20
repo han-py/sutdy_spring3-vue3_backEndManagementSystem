@@ -30,5 +30,13 @@
         </where>
         order by id desc
     </select>
+    <select id="selectByUsername" resultType="com.example.springboot3.entity.Employee">
+        select * from employee
+        <where>
+            <if test="username != null">
+                and username = #{username}
+            </if>
+        </where>
+    </select>
 
 </mapper>

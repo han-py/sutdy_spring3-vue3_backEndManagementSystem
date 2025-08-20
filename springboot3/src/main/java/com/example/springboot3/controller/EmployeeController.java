@@ -82,4 +82,10 @@ public class EmployeeController {
         PageInfo<Employee> pageInfo = employeeService.selectPage(employee,pageNum, pageSize);
         return Result.success(pageInfo);
     }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody Employee employee) {
+        employeeService.login(employee);
+        return Result.success();
+    }
 }

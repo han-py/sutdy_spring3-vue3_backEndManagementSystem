@@ -1,6 +1,7 @@
 package com.example.springboot3.service;
 
 import com.example.springboot3.entity.Employee;
+import com.example.springboot3.exception.CustomException;
 import com.example.springboot3.mapper.EmployeeMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -45,5 +46,18 @@ public class EmployeeService {
         for (Integer id : ids) {
             this.delete(id);
         }
+    }
+
+    public Employee login(Employee employee) {
+        String username = employee.getUsername();
+        Employee dbEmployee = employeeMapper.selectByUsername(username);
+        if (dbEmployee == null) {
+            throw new CustomException("500", "账号不存在");
+        }
+        String password = employee.getPassword();
+        if (!password.equals(dbEmployee.getPassword())) {
+            throw new CustomException("500", "账号或密码错误");
+        }
+        return dbEmployee;
     }
 }
