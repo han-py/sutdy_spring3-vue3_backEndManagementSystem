@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/manager'},
+    { path: '/', redirect: '/login'},
     { path: '/manager', name: 'manager', meta: { title: '管理员主菜单' }, component: () => import('../views/Manager.vue'), children: [
         { path: 'data', name: 'user', meta: { title: '数据展示页面' }, component: () => import('../views/Data.vue')},
         { path: 'employee', name: 'employee', meta: { title: '员工信息页面' }, component: () => import('../views/Employee.vue')},
