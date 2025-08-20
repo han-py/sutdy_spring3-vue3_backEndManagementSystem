@@ -1,14 +1,19 @@
 package com.example.springboot3.controller;
 
 import com.example.springboot3.common.Result;
+import com.example.springboot3.entity.Employee;
 import com.example.springboot3.exception.CustomException;
+import com.example.springboot3.service.EmployeeService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
 @RestController
 public class WebController {
+    private EmployeeService employeeService;
 
     @GetMapping("/hello")
     public String hello() {
@@ -32,5 +37,11 @@ public class WebController {
         map.put("name", "HaPpY");
         map.put("age", 20);
         return Result.success(map);
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody Employee employee) {
+        Employee dbemployee = employeeService.login(employee);
+        return Result.success(dbemployee);
     }
 }
