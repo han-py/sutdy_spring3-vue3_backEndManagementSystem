@@ -307,3 +307,13 @@ public class CorsConfig {
    }
 ```
 ***
+### hutool 工具包 https://doc.hutool.cn/pages/index/
+```
+<!--  hutool 插件包 -->
+<dependency>
+  <groupId>cn.hutool</groupId>
+  <artifactId>hutool-all</artifactId>
+  <version>5.8.25</version>
+</dependency>
+```
+***
