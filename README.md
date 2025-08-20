@@ -291,3 +291,19 @@ public class CorsConfig {
 ### 注意：MySQL中如果表名是关键字（如employee），需要用反引号(`)而不是单引号(')包围。
 ### 注意：前后端的接口名称要对应，尤其注意后端接口最后该不该有(/)。
 ***
+### 构造函数注入方式（推荐）
+#### 使用构造函数注入替代字段注入：
+```
+   @RestController
+   public class WebController {
+       
+       private final EmployeeService employeeService;
+       
+       public WebController(EmployeeService employeeService) {
+           this.employeeService = employeeService;
+       }
+       
+       // 其他方法
+   }
+```
+***
