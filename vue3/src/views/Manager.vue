@@ -72,4 +72,8 @@ const data = reactive({
 .el-menu .is-active {
   background-color: #e6ecf7 !important;
 }
+
+.el-sub-menu__title {
+  background-color: white !important;
+}
 </style>
