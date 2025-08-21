@@ -3,7 +3,7 @@ package com.example.springboot3.entity;
 import lombok.Data;
 
 @Data
-public class Employee {
+public class Employee extends Account{
     private Integer id;
     private String username;
     private String password;
