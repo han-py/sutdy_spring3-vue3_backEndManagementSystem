@@ -34,11 +34,11 @@ public class AdminService {
     public void add(Admin admin) {
         String username = admin.getUsername();  // 账号
         Admin dbAdmin = adminMapper.selectByUsername(username);
-        if (dbAdmin != null) {  // 注册的账号已存在  无法注册
+        if (dbAdmin != null) {  // 注册的账号已存在  无法注册  注意：管理员账号无法通过注册的方式新增
             throw new CustomException("500", "账号已存在，请更换别的账号");
         }
         if (StrUtil.isBlank(admin.getPassword())) {  // 密码没填
-            admin.setPassword("123");  // 默认密码 123
+            admin.setPassword("admin");  // 默认密码 admin
         }
         if (StrUtil.isBlank(admin.getName())) {  // 名字没填
             admin.setName(admin.getUsername());  // 默认名称
