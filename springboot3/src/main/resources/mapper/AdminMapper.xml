@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot3.mapper.AdminMapper">
+
+    <insert id="insert" parameterType="com.example.springboot3.entity.Admin">
+        insert into admin(username,password,role,name)
+        values(#{username},#{password},#{role},#{name}) <!-- 绑值时要用驼峰的写法 -->
+    </insert>
+
+    <update id="updateById" parameterType="com.example.springboot3.entity.Admin">
+        update admin
+        set name = #{name}
+        where id = #{id}
+
+    </update>
+
+    <select id="selectAll" resultType="com.example.springboot3.entity.Admin">
+        select * from admin
+        <where>
+            <if test="name != null">
+                and name like concat('%', #{name}, '%')  <!-- 全模糊查询 -->
+            </if>
+        </where>
+        order by id desc
+    </select>
+    <select id="selectByUsername" resultType="com.example.springboot3.entity.Admin">
+        select * from admin
+        <where>
+            <if test="username != null">
+                and username = #{username}
+            </if>
+        </where>
+    </select>
+
+</mapper>
