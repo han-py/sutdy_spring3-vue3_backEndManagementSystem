@@ -39,6 +39,10 @@
             <el-icon><UserFilled /></el-icon>
             个人信息
           </el-menu-item>
+          <el-menu-item index="/manager/password">
+            <el-icon><Lock /></el-icon>
+            修改密码
+          </el-menu-item>
           <el-menu-item @click="logout">
             <el-icon><SwitchButton /></el-icon>
             退出登录
@@ -49,7 +53,7 @@
 
       <!-- 右侧主体区域开始 -->
       <div style="flex: 1; width: 0; background-color: #f5f7ff; padding: 10px">
-        <RouterView />
+        <RouterView @updateUser="updateUser" />
       </div>
       <!-- 右侧主体区域结束 -->
     </div>
@@ -61,7 +65,8 @@
 <script setup>
 import {reactive} from "vue";
 import router from "@/router/index.js";
-import {DataAnalysis, House, SwitchButton, User, UserFilled} from "@element-plus/icons-vue";
+import {DataAnalysis, House, Lock, SwitchButton, User, UserFilled} from "@element-plus/icons-vue";
+import {ElMessage} from "element-plus";
 
 const data = reactive({
   user: JSON.parse(localStorage.getItem('xm-pro-user'))
@@ -73,6 +78,10 @@ const logout = () => {
   setTimeout(() => {
     location.href = '/login'
   }, 500)
+}
+
+const updateUser = () => {
+  data.user = JSON.parse(localStorage.getItem('xm-pro-user'))
 }
 </script>
 

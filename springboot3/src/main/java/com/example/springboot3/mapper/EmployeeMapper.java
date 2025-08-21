@@ -23,4 +23,6 @@ public interface EmployeeMapper {
     void deleteById(Integer id);
 
     Employee selectByUsername(String username);
+
+    Employee selectByNo(String no);
 }

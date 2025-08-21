@@ -17,7 +17,8 @@
             no = #{no},
             age = #{age},
             description = #{description},
-            department_id = #{departmentId}
+            department_id = #{departmentId},
+            password = #{password}
         where id = #{id}
 
     </update>
@@ -36,6 +37,14 @@
         <where>
             <if test="username != null">
                 and username = #{username}
+            </if>
+        </where>
+    </select>
+    <select id="selectByNo" resultType="com.example.springboot3.entity.Employee">
+        select * from employee
+        <where>
+            <if test="no != null">
+                and no = #{no}
             </if>
         </where>
     </select>

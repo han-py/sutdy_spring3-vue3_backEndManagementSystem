@@ -41,6 +41,11 @@ public class EmployeeService {
         if (StrUtil.isBlank(employee.getPassword())) {  // 密码没填
             employee.setPassword("123");  // 默认密码 123
         }
+        String no = employee.getNo();
+        Employee dbEmployeeNo = employeeMapper.selectByNo(no);
+        if (dbEmployeeNo != null) {  // 注册的工号已存在  无法注册
+            throw new CustomException("500", "工号已存在，请更换别的工号");
+        }
         if (StrUtil.isBlank(employee.getName())) {  // 名字没填
             employee.setName(employee.getUsername());  // 默认名称
         }
@@ -74,5 +79,15 @@ public class EmployeeService {
             throw new CustomException("500", "账号或密码错误");
         }
         return dbEmployee;
+    }
+
+    public void updatePassword(Account account) {
+        Integer id = account.getId();
+        Employee employee = this.selectById(id);
+        if (!employee.getPassword().equals(account.getPassword())) {  // 页面传来的原密码跟数据库密码对比  不匹配就报错
+            throw new CustomException("500", "对不起，原密码错误");
+        }
+        employee.setPassword(account.getNewPassword());  // 设置新密码
+        this.update(employee);
     }
 }

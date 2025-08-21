@@ -7,10 +7,7 @@ import com.example.springboot3.exception.CustomException;
 import com.example.springboot3.service.AdminService;
 import com.example.springboot3.service.EmployeeService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -65,6 +62,19 @@ public class WebController {
     public Result register(@RequestBody Employee employee) {
 
         employeeService.add(employee);
+        return Result.success();
+    }
+
+    /**
+     * 修改密码
+     */
+    @PutMapping("/updatePassword")
+    public Result updatePassword(@RequestBody Account account) {
+        if ("ADMIN".equals(account.getRole())) {  // 管理员登录
+            adminService.updatePassword(account);
+        } else if ("EMP".equals(account.getRole())) {
+            employeeService.updatePassword(account);
+        }
         return Result.success();
     }
 }

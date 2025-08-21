@@ -13,6 +13,9 @@
           <el-form-item prop="confirmPassword">
             <el-input show-password size="large" v-model="data.form.confirmPassword" placeholder="请确认密码" prefix-icon="Lock"></el-input>
           </el-form-item>
+          <el-form-item prop="no">
+            <el-input show-password size="large" v-model="data.form.no" placeholder="请输入工号" prefix-icon="Lock"></el-input>
+          </el-form-item>
           <div style="margin-bottom: 20px">
             <el-button @click="register" size="large" style="width: 100%" type="primary">注 册</el-button>
           </div>
@@ -48,6 +51,9 @@ const data = reactive({
     ],
     password: [
       { required: true, message: '请输入密码', trigger: 'blur' }
+    ],
+    no: [
+      { required: true, message: '请输入工号', trigger: 'blur' }
     ],
     confirmPassword: [
       { validator:  validatePass, trigger: 'blur'}

@@ -75,4 +75,14 @@ public class AdminService {
         }
         return dbAdmin;
     }
+
+    public void updatePassword(Account account) {
+        Integer id = account.getId();
+        Admin admin = this.selectById(id);
+        if (!admin.getPassword().equals(account.getPassword())) {  // 页面传来的原密码跟数据库密码对比  不匹配就报错
+            throw new CustomException("500", "对不起，原密码错误");
+        }
+        admin.setPassword(account.getNewPassword());  // 设置新密码
+        this.update(admin);
+    }
 }
