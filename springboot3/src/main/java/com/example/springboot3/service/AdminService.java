@@ -44,7 +44,7 @@ public class AdminService {
             admin.setName(admin.getUsername());  // 默认名称
         }
         // 一定要设置角色
-        admin.setRole("EMP");  // 员工的角色
+        admin.setRole("ADMIN ");  // 管理员的角色
         adminMapper.insert(admin);
     }
 

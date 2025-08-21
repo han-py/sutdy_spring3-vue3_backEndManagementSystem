@@ -32,7 +32,7 @@
               <el-icon><User /></el-icon>
               <span>用户管理</span>
             </template>
-            <el-menu-item>管理员信息</el-menu-item>
+            <el-menu-item index = "/manager/admin">管理员信息</el-menu-item>
             <el-menu-item index = "/manager/employee">员工信息</el-menu-item>
           </el-sub-menu>
           <el-menu-item index="/manager/person">
