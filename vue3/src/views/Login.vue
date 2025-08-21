@@ -10,6 +10,12 @@
           <el-form-item prop="password">
             <el-input show-password size="large" v-model="data.form.password" placeholder="请输入密码" prefix-icon="Lock"></el-input>
           </el-form-item>
+          <el-form-item prop="role">
+            <el-select v-model="data.form.role" style="width: 100%" size="large">
+              <el-option label="管理员" value="ADMIN"></el-option>
+              <el-option label="员工" value="EMP"></el-option>
+            </el-select>
+          </el-form-item>
           <div style="margin-bottom: 20px">
             <el-button @click="login" size="large" style="width: 100%" type="primary">登 录</el-button>
           </div>
@@ -28,7 +34,7 @@ import request from "@/utils/request.js";
 import {ElMessage} from "element-plus";
 
 const data = reactive({
-  form: {},
+  form: { role: "ADMIN"},
   rules: {
     username: [
       { required: true, message: '请输入账号', trigger: 'blur' }

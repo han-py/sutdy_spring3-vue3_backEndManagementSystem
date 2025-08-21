@@ -1,9 +1,12 @@
 package com.example.springboot3.controller;
 
 import com.example.springboot3.common.Result;
+import com.example.springboot3.entity.Account;
 import com.example.springboot3.entity.Employee;
 import com.example.springboot3.exception.CustomException;
+import com.example.springboot3.service.AdminService;
 import com.example.springboot3.service.EmployeeService;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +16,11 @@ import java.util.HashMap;
 
 @RestController
 public class WebController {
-    private final EmployeeService employeeService;
+    @Resource
+    private EmployeeService employeeService;
+
+    @Resource
+    private AdminService adminService;
 
     public WebController(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -44,13 +51,19 @@ public class WebController {
     }
 
     @PostMapping("/login")
-    public Result login(@RequestBody Employee employee) {
-        Employee dbemployee = employeeService.login(employee);
-        return Result.success(dbemployee);
+    public Result login(@RequestBody Account account) {
+        Account result = null;
+        if("ADMIN".equals(account.getRole())){
+            result = adminService.login( account);
+        } else if ("EMP".equals(account.getRole())) {
+            result = employeeService.login(account);
+        }
+        return Result.success(result);
     }
 
     @PostMapping("/register")
     public Result register(@RequestBody Employee employee) {
+
         employeeService.add(employee);
         return Result.success();
     }

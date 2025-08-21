@@ -11,7 +11,8 @@
 
     <update id="updateById" parameterType="com.example.springboot3.entity.Employee">
         update employee
-        set name = #{name},
+        set username = #{username}, 
+            name = #{name},
             sex = #{sex},
             no = #{no},
             age = #{age},

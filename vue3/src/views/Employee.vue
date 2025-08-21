@@ -43,8 +43,8 @@
     </div>
 
     <el-dialog title="员工信息" v-model="data.formVisible" width="500" destroy-on-close>
-      <el-form :model="data.form" :rules = "data.rules" label-width="80px" style="padding-right: 40px; padding-top: 20px">
-        <el-form-item ref = "formRef" label="账号" prop="username">
+      <el-form ref="formRef" :model="data.form" :rules="data.rules" label-width="80px" style="padding-right: 40px; padding-top: 20px">
+        <el-form-item label="账号" prop="username">
           <el-input v-model="data.form.username" autocomplete="off" placeholder="请输入账号" />
         </el-form-item>
         <el-form-item label="名称" prop="name">
@@ -125,7 +125,8 @@ const handleAdd = () => {
 }
 
 const save = () => {
-  formRef.value.validate(valid => {
+  if (!formRef.value) return
+  formRef.value.validate((valid) => {
     if (valid) {
       data.form.id ? update() : add()
     }

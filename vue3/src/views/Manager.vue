@@ -39,7 +39,7 @@
             <el-icon><UserFilled /></el-icon>
             个人信息
           </el-menu-item>
-          <el-menu-item index="/login">
+          <el-menu-item @click="logout">
             <el-icon><SwitchButton /></el-icon>
             退出登录
           </el-menu-item>
@@ -66,6 +66,14 @@ import {DataAnalysis, House, SwitchButton, User, UserFilled} from "@element-plus
 const data = reactive({
   user: JSON.parse(localStorage.getItem('xm-pro-user'))
 })
+
+const logout = () => {
+  localStorage.removeItem('xm-pro-user')  // 清楚当前登录的用户的缓存数据
+  ElMessage.success('退出登录成功')
+  setTimeout(() => {
+    location.href = '/login'
+  }, 500)
+}
 </script>
 
 <style>

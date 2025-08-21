@@ -12,6 +12,7 @@
     <update id="updateById" parameterType="com.example.springboot3.entity.Admin">
         update admin
         set name = #{name}
+            ,username = #{username}
         where id = #{id}
 
     </update>
