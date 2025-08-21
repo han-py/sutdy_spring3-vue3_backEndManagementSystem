@@ -54,6 +54,8 @@ public class WebController {
             result = adminService.login( account);
         } else if ("EMP".equals(account.getRole())) {
             result = employeeService.login(account);
+        } else {
+            throw new CustomException("500", "非法输入");
         }
         return Result.success(result);
     }
@@ -74,6 +76,8 @@ public class WebController {
             adminService.updatePassword(account);
         } else if ("EMP".equals(account.getRole())) {
             employeeService.updatePassword(account);
+        } else {
+            throw new CustomException("500", "非法输入");
         }
         return Result.success();
     }
