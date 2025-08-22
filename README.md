@@ -319,3 +319,110 @@ public class CorsConfig {
 ***
 ### 快速替换：选中要替换的部分，然后按快捷键 Ctrl + R
 ***
+### SpringBoot3+Vue3实现文件上传下载功能
+#### 文件上传
+##### // System.getProperty("user.dir") 获取到你当前这个项目的根路径
+##### // 文件上传的目录的路径
+```
+private static final String filePath = System.getProperty("user.dir") + "/files/";
+```
+```
+/**
+ * 文件上传
+ */
+@PostMapping("/upload")
+public Result upload(MultipartFile file) {   // 文件流的形式接收前端发送过来的文件
+    String originalFilename = file.getOriginalFilename();  // xxx.png
+    if (!FileUtil.isDirectory(filePath)) {  // 如果目录不存在 需要先创建目录
+        FileUtil.mkdir(filePath);  // 创建一个 files 目录
+    }
+    // 提供文件存储的完整的路径
+    // 给文件名 加一个唯一的标识
+    String fileName = System.currentTimeMillis() + "_" + originalFilename;  // 156723232322_xxx.png
+    String realPath = filePath + fileName;   // 完整的文件路径
+    try {
+        FileUtil.writeBytes(file.getBytes(), realPath);
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new CustomException("500", "文件上传失败");
+    }
+    // 返回一个网络连接
+    // http://localhost:9090/files/download/xxxx.jpg
+    String url = "http://localhost:9090/files/download/" + fileName;
+    return Result.success(url);
+}
+```
+#### 文件下载
+```
+response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+response.setContentType("application/octet-stream");
+```
+```
+/**
+ * 文件下载
+ */
+@GetMapping("/download/{fileName}")
+public void download(@PathVariable String fileName, HttpServletResponse response) {
+    try {
+        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+        response.setContentType("application/octet-stream");
+        OutputStream os = response.getOutputStream();
+        String realPath = filePath + fileName;   // 完整的文件路径：http://localhost:9090/files/download/1729672708145_123.jpg
+        // 获取到文件的字节数组
+        byte[] bytes = FileUtil.readBytes(realPath);
+        os.write(bytes);
+        os.flush();
+        os.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new CustomException("500", "文件下载失败");
+    }
+}
+```
+#### 前端对接文件上传和下载
+##### 用户头像
+##### upload 组件
+```
+<div style="width: 100%; display: flex; justify-content: center; margin-bottom: 20px">
+  <el-upload
+      class="avatar-uploader"
+      action="http://localhost:9090/files/upload"
+      :show-file-list="false"
+      :on-success="handleAvatarSuccess"
+  >
+    <img v-if="data.form.avatar" :src="data.form.avatar" class="avatar" />
+    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+  </el-upload>
+</div>
+```
+##### 回调函数
+```
+const handleAvatarSuccess = (res) => {
+  data.form.avatar = res.data
+}
+```
+#### 表格里面显示图片
+```
+<el-table-column label="头像">
+  <template #default="scope">
+    <img v-if="scope.row.avatar" :src="scope.row.avatar" alt="" style="display: block; width: 40px; height: 40px; border-radius: 50%" />
+  </template>
+</el-table-column>
+```
+#### 上传头像
+```
+<el-form-item label="头像">
+  <el-upload
+      action="http://localhost:9090/files/upload"
+      list-type="picture"
+      :on-success="handleAvatarSuccess"
+  >
+    <el-button type="primary">上传头像</el-button>
+  </el-upload>
+</el-form-item>
+
+const handleAvatarSuccess = (res) => {
+  data.form.avatar = res.data
+}
+```
+***
