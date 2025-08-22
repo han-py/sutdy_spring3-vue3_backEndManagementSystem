@@ -5,8 +5,8 @@
 <mapper namespace="com.example.springboot3.mapper.EmployeeMapper">
 
     <insert id="insert" parameterType="com.example.springboot3.entity.Employee">
-        insert into employee(username,password,role,name,sex,no,age,description,department_id)
-        values(#{username},#{password},#{role},#{name},#{sex},#{no},#{age},#{description},#{departmentId}) <!-- 绑值时要用驼峰的写法 -->
+        insert into employee(username,password,role,name,sex,no,age,description,department_id,avatar)
+        values(#{username},#{password},#{role},#{name},#{sex},#{no},#{age},#{description},#{departmentId},#{avatar}) <!-- 绑值时要用驼峰的写法 -->
     </insert>
 
     <update id="updateById" parameterType="com.example.springboot3.entity.Employee">
@@ -18,7 +18,8 @@
             age = #{age},
             description = #{description},
             department_id = #{departmentId},
-            password = #{password}
+            password = #{password},
+            avatar = #{avatar}
         where id = #{id}
 
     </update>

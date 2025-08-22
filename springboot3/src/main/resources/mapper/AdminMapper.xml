@@ -5,8 +5,8 @@
 <mapper namespace="com.example.springboot3.mapper.AdminMapper">
 
     <insert id="insert" parameterType="com.example.springboot3.entity.Admin">
-        insert into admin(username,password,role,name)
-        values(#{username},#{password},#{role},#{name}) <!-- 绑值时要用驼峰的写法 -->
+        insert into admin(username,password,role,name, avatar)
+        values(#{username},#{password},#{role},#{name}, #{avatar}) <!-- 绑值时要用驼峰的写法 -->
     </insert>
 
     <update id="updateById" parameterType="com.example.springboot3.entity.Admin">
@@ -14,7 +14,8 @@
         set username = #{username},
             name = #{name},
             password = #{password},
-            role = #{role}
+            role = #{role},
+            avatar = #{avatar}
         where id = #{id}
 
     </update>

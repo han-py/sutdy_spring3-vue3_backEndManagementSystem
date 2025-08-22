@@ -9,4 +9,5 @@ public class Admin extends  Account{
     private String password;
     private String name;
     private String role;
+    private String avatar;
 }

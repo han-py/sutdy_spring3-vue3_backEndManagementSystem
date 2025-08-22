@@ -1,4 +1,4 @@
-<template>
+<template xmlns:border-radius="http://www.w3.org/1999/xhtml">
   <div>
     <!--  头部开始 -->
     <div style="height: 60px; background-color: #3c7fff; display: flex; align-items: center">
@@ -8,7 +8,7 @@
       </div>
       <div style="flex: 1"></div>
       <div style="width: fit-content; display: flex; align-items: center; padding-right: 10px">
-        <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" alt="" style="width: 40px; height: 40px">
+        <img :src= "data.user.avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" alt="" style="width: 40px; height: 40px; border-radius: 50%">
         <span style="color: white; margin-left: 5px">{{data.user.name}}</span>
       </div>
     </div>

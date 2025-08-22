@@ -10,4 +10,5 @@ public class Account {
     private String name;
     private String role;
     private String newPassword = "";
+    private String avatar; // 头像路径
 }
