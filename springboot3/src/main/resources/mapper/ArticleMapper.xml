@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot3.mapper.ArticleMapper">
+
+    <insert id="insert" parameterType="com.example.springboot3.entity.Article">
+        insert into article(username,password,role,name, avatar)
+        values(#{username},#{password},#{role},#{name}, #{avatar}) <!-- 绑值时要用驼峰的写法 -->
+    </insert>
+
+    <update id="updateById" parameterType="com.example.springboot3.entity.Article">
+        update article
+        set username = #{username},
+            name = #{name},
+            password = #{password},
+            role = #{role},
+            avatar = #{avatar}
+        where id = #{id}
+
+    </update>
+
+    <select id="selectAll" resultType="com.example.springboot3.entity.Article">
+        select * from article
+        <where>
+            <if test="name != null">
+                and name like concat('%', #{name}, '%')  <!-- 全模糊查询 -->
+            </if>
+        </where>
+        order by id desc
+    </select>
+    <select id="selectByUsername" resultType="com.example.springboot3.entity.Article">
+        select * from article
+        <where>
+            <if test="username != null">
+                and username = #{username}
+            </if>
+        </where>
+    </select>
+
+</mapper>
