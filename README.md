@@ -426,3 +426,171 @@ const handleAvatarSuccess = (res) => {
 }
 ```
 ***
+### SpringBoot3+Vue3实现富文本编辑器功能
+#### wangeditor5官网 https://www.wangeditor.com/
+### 安装wangeditor5
+```
+npm install @wangeditor/editor --save
+npm install @wangeditor/editor-for-vue@next --save
+```
+### 引入和使用 wangeditor5
+```
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
+import {onBeforeUnmount, ref, shallowRef} from "vue";
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+```
+##### 初始化（表单中）
+##### wangEditor 5 富文本字段可以直接和form中的字段使用v-model进行绑定
+```
+<div style="border: 1px solid #ccc; width: 100%">
+  <Toolbar
+      style="border-bottom: 1px solid #ccc"
+      :editor="editorRef"
+      :mode="mode"
+  />
+  <Editor
+      style="height: 500px; overflow-y: hidden;"
+      v-model="data.form.content"
+      :mode="mode"
+      :defaultConfig="editorConfig"
+      @onCreated="handleCreated"
+  />
+</div>
+```
+```
+/* wangEditor5 初始化开始 */
+const baseUrl = 'http://localhost:9090'
+const editorRef = shallowRef()  // 编辑器实例，必须用 shallowRef
+const mode = 'default' 
+const editorConfig = { MENU_CONF: {} }
+// 图片上传配置
+editorConfig.MENU_CONF['uploadImage'] = {
+  server: baseUrl + '/files/wang/upload',  // 服务端图片上传接口
+  fieldName: 'file'  // 服务端图片上传接口参数
+}
+// 组件销毁时，也及时销毁编辑器，否则可能会造成内存泄漏
+onBeforeUnmount(() => {
+  const editor = editorRef.value
+  if (editor == null) return
+  editor.destroy()
+})
+// 记录 editor 实例，重要！
+const handleCreated = (editor) => {
+  editorRef.value = editor 
+}
+/* wangEditor5 初始化结束 */
+```
+### 在表格里查看富文本内容
+```
+<el-table-column label="内容">
+  <template #default="scope">
+    <el-button type="primary" @click="view(scope.row.content)">查看内容</el-button>
+  </template>
+</el-table-column>
+
+<el-dialog title="内容" v-model="data.viewVisible" width="50%" :close-on-click-modal="false" destroy-on-close>
+  <div class="editor-content-view" style="padding: 20px" v-html="data.content"></div>
+  <template #footer>
+    <span class="dialog-footer">
+      <el-button @click="data.viewVisible = false">关 闭</el-button>
+    </span>
+  </template>
+</el-dialog>             
+
+const view = (content) => {
+  data.content = content
+  data.viewVisible = true
+}
+
+data: {
+  viewVisible: false,
+  content: null    
+}
+```
+### 富文本对应的后端文件上传接口
+```
+/**
+ * wang-editor编辑器文件上传接口
+ */
+@PostMapping("/wang/upload")
+public Map<String, Object> wangEditorUpload(MultipartFile file) {
+    String originalFilename = file.getOriginalFilename();  
+    if (!FileUtil.isDirectory(filePath)) {  
+        FileUtil.mkdir(filePath);  // 创建一个 files 目录
+    }
+    // 提供文件存储的完整的路径
+    // 给文件名 加一个唯一的标识
+    String fileName = System.currentTimeMillis() + "_" + originalFilename;  // 156723232322_xxx.png
+    String realPath = filePath + fileName;   // 完整的文件路径
+    try {
+        FileUtil.writeBytes(file.getBytes(), realPath);
+    } catch (IOException e) {
+        e.printStackTrace();
+        throw new CustomException("500", "文件上传失败");
+    }
+    String url = "http://localhost:9090/files/download/" + fileName;
+   // wangEditor上传图片成功后， 需要返回的参数
+    Map<String, Object> resMap = new HashMap<>();
+    List<Map<String, Object>> list = new ArrayList<>();
+    Map<String, Object> urlMap = new HashMap<>();
+    urlMap.put("url", url);
+    list.add(urlMap);
+    resMap.put("errno", 0);
+    resMap.put("data", list);
+    return resMap;
+}
+```
+### 外部引入 view.css （可选）
+```
+.editor-content-view {
+    padding: 0 10px;
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.editor-content-view p,
+.editor-content-view li {
+    white-space: pre-wrap; /* 保留空格 */
+}
+
+.editor-content-view blockquote {
+    border-left: 8px solid #d0e5f2;
+    padding: 10px 10px;
+    margin: 10px 0;
+    background-color: #f1f1f1;
+}
+
+.editor-content-view code {
+    font-family: monospace;
+    background-color: #eee;
+    padding: 3px;
+    border-radius: 3px;
+}
+.editor-content-view pre>code {
+    display: block;
+    padding: 10px;
+}
+
+.editor-content-view table {
+    border-collapse: collapse;
+}
+.editor-content-view td,
+.editor-content-view th {
+    border: 1px solid #ccc;
+    min-width: 50px;
+    height: 20px;
+}
+.editor-content-view th {
+    background-color: #f1f1f1;
+}
+
+.editor-content-view ul,
+.editor-content-view ol {
+    padding-left: 20px;
+}
+
+.editor-content-view input[type="checkbox"] {
+    margin-right: 5px;
+}
+```
+***
