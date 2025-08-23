@@ -6,16 +6,17 @@ import com.example.springboot3.common.Result;
 import com.example.springboot3.exception.CustomException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 文件相关的接口
@@ -72,5 +73,36 @@ public class FileController {
         } catch (IOException e) {
             throw new CustomException("500", "文件下载失败");
         }
+    }
+
+    /**
+     * wang-editor编辑器文件上传接口
+     */
+    @PostMapping("/wang/upload")
+    public Map<String, Object> wangEditorUpload(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        if (!FileUtil.isDirectory(filePath)) {
+            FileUtil.mkdir(filePath);  // 创建一个 files 目录
+        }
+        // 提供文件存储的完整的路径
+        // 给文件名 加一个唯一的标识
+        String fileName = System.currentTimeMillis() + "_" + originalFilename;  // 156723232322_xxx.png
+        String realPath = filePath + fileName;   // 完整的文件路径
+        try {
+            FileUtil.writeBytes(file.getBytes(), realPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CustomException("500", "文件上传失败");
+        }
+        String url = "http://localhost:9090/files/download/" + fileName;
+        // wangEditor上传图片成功后， 需要返回的参数
+        Map<String, Object> resMap = new HashMap<>();
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> urlMap = new HashMap<>();
+        urlMap.put("url", url);
+        list.add(urlMap);
+        resMap.put("errno", 0);
+        resMap.put("data", list);
+        return resMap;
     }
 }
