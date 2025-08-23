@@ -11,6 +11,7 @@ const router = createRouter({
         { path: 'person', name: 'person', meta: { title: '个人信息页面' }, component: () => import('../views/Person.vue')},
         { path: 'password', name: 'password', meta: { title: '修改密码' }, component: () => import('../views/Password.vue')},
         { path: 'article', name: 'article', meta: { title: '文章信息' }, component: () => import('../views/Article.vue')},
+        { path: 'dept', name: 'dept', meta: { title: '部门信息' }, component: () => import('../views/Dept.vue')},
         { path: "404", name: "404", meta: { title: "页面不存在" }, component: () => import("../views/404.vue")},
         { path: ':pathMatch(.*)*', redirect: '/404'},
       ] },
