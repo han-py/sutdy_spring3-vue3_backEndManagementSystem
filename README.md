@@ -594,3 +594,99 @@ public Map<String, Object> wangEditorUpload(MultipartFile file) {
 }
 ```
 ***
+### 数据批量导入导出功能（通过 excel 导入导出）
+#### 引入 poi-ooxml 依赖
+```
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>5.3.0</version>
+</dependency>
+```
+#### 后端代码
+```
+/**
+     * 导出excel
+     */
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) throws Exception {
+        // 1. 拿到所有的员工数据
+        List<Employee> employeeList = employeeService.selectAll(null);
+        // 2. 构建 ExcelWriter
+        // 在内存操作，写出到浏览器
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        // 3. 设置中文表头
+        writer.addHeaderAlias("username", "账号");
+        writer.addHeaderAlias("name", "名称");
+        writer.addHeaderAlias("sex", "性别");
+        writer.addHeaderAlias("no", "工号");
+        writer.addHeaderAlias("age", "年龄");
+        writer.addHeaderAlias("description", "个人介绍");
+        writer.addHeaderAlias("departmentName", "部门");
+        // 默认的，未添加alias的属性也会写出，如果想只写出加了别名的字段，可以调用此方法排除之
+        writer.setOnlyAlias(true);
+        // 4. 写出数据到writer
+        writer.write(employeeList, true);
+        // 5. 设置输出的文件的名称  以及输出流的头信息
+        // 设置浏览器响应的格式
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+        String fileName = URLEncoder.encode("员工信息", "UTF-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
+        // 6. 写出到输出流 并关闭 writer
+        ServletOutputStream os = response.getOutputStream();
+        writer.flush(os);
+        writer.close();
+    }
+
+    /**
+     * excel 导入
+     */
+    @PostMapping("/import")
+    public Result importData(MultipartFile file) throws Exception {
+        // 1. 拿到输入流 构建 reader
+        InputStream inputStream = file.getInputStream();
+        ExcelReader reader = ExcelUtil.getReader(inputStream);
+        // 2. 读取 excel里面的数据
+        reader.addHeaderAlias("账号", "username");
+        reader.addHeaderAlias("名称", "name");
+        reader.addHeaderAlias("性别", "sex");
+        reader.addHeaderAlias("工号", "no");
+        reader.addHeaderAlias("年龄", "age");
+        reader.addHeaderAlias("个人介绍", "description");
+        reader.addHeaderAlias( "部门", "departmentName");
+        List<Employee> employeeList = reader.readAll(Employee.class);
+        // 3. 写入list数据到数据库
+        for (Employee employee : employeeList) {
+            employeeService.add(employee);
+        }
+        return Result.success();
+    }
+```
+#### 前端代码
+```
+<el-upload
+          style="display: inline-block; margin: 0 10px"
+          action="http://localhost:9090/employee/import"
+          :show-file-list="false"
+          :on-success="importSuccess"
+      >
+        <el-button type="info">导入</el-button>
+      </el-upload>
+      <el-button type="success" @click="exportData">导出</el-button>
+```
+```
+const exportData = () => {
+  // 导出数据 是通过流的形式下载 excel   打开流的链接，浏览器会自动帮我们下载文件
+  window.open('http://localhost:9090/employee/export')
+}
+
+const importSuccess = (res) => {
+  if (res.code === '200') {
+    ElMessage.success('批量导入数据成功')
+    load()
+  } else {
+    ElMessage.error(res.msg)
+  }
+}
+```
+***
