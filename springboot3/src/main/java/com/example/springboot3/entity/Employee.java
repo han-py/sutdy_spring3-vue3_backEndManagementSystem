@@ -15,4 +15,5 @@ public class Employee extends Account{
     private String description;
     private Integer departmentId;
     private String avatar;
+    private String deptName;
 }

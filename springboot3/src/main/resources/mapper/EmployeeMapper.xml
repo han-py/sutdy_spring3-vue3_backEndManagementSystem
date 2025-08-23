@@ -25,13 +25,14 @@
     </update>
 
     <select id="selectAll" resultType="com.example.springboot3.entity.Employee">
-        select * from employee
+        select employee.*,dept.name as deptName from employee
+        left join dept on employee.department_id = dept.id
         <where>
             <if test="name != null">
-                and name like concat('%', #{name}, '%')  <!-- 全模糊查询 -->
+                and employee.name like concat('%', #{name}, '%')  <!-- 全模糊查询 -->
             </if>
         </where>
-        order by id desc
+        order by employee.id desc
     </select>
     <select id="selectByUsername" resultType="com.example.springboot3.entity.Employee">
         select * from employee

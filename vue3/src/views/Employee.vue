@@ -25,7 +25,7 @@
         <el-table-column label="工号" prop="no" />
         <el-table-column label="年龄" prop="age" />
         <el-table-column label="个人介绍" prop="description" show-overflow-tooltip />
-        <el-table-column label="部门" prop="departmentName" />
+        <el-table-column label="部门" prop="deptName" />
         <el-table-column label="操作" width="120">
           <template #default="scope">
             <el-button @click="handleUpdate(scope.row)" type="primary" :icon="Edit" circle></el-button>
@@ -51,6 +51,11 @@
       <el-form ref="formRef" :model="data.form" :rules="data.rules" label-width="80px" style="padding-right: 40px; padding-top: 20px">
         <el-form-item label="账号" prop="username">
           <el-input :disabled="data.form.id" v-model="data.form.username" autocomplete="off" placeholder="请输入账号" />
+        </el-form-item>
+        <el-form-item label="部门">
+          <el-select style="width: 100%" v-model = "data.form.departmentId">
+            <el-option v-for="item in data.departmentList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="头像">
           <el-upload
@@ -105,11 +110,16 @@ const data = reactive({
   formVisible: false,
   form:{},
   ids: [],
+  departmentList: [],
   rules:{
     username:[{ required: true, message: '请输入账号', trigger: 'blur'}],
     name:[{ required: true, message: '请输入名称', trigger: 'blur'}],
     no:[{ required: true, message: '请输入工号', trigger: 'blur'}],
   }
+})
+
+request.get('dept/selectAll').then(res => {
+  data.departmentList = res.data
 })
 
 const formRef = ref()

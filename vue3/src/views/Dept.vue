@@ -58,7 +58,7 @@ import request from "@/utils/request.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 
 const data = reactive({
-  name: null,
+  name: '',  // 将 null 改为空字符串
   tableData: [],
   pageNum: 1,
   pageSize: 10,
@@ -76,7 +76,7 @@ const data = reactive({
 const formRef = ref()
 
 const load = () => {
-  request.get('/dept/selectPage', { // ?pageNum=1&pageSize=10
+  request.get('/dept/selectPage', {
     params: {
       pageNum: data.pageNum,
       pageSize: data.pageSize,
@@ -90,8 +90,8 @@ const load = () => {
 load()
 
 const reset = () => {
-  data.name = null
-  load()
+  data.name = ''  // 将 null 改为空字符串
+  load()  // 重置后重新加载数据
 }
 
 const handleAdd = () => {
