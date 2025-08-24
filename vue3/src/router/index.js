@@ -12,6 +12,7 @@ const router = createRouter({
         { path: 'password', name: 'password', meta: { title: '修改密码' }, component: () => import('../views/Password.vue')},
         { path: 'article', name: 'article', meta: { title: '文章信息' }, component: () => import('../views/Article.vue')},
         { path: 'dept', name: 'dept', meta: { title: '部门信息' }, component: () => import('../views/Dept.vue')},
+        { path: 'home', name: 'home', meta: { title: '系统首页' }, component: () => import('../views/Home.vue')},
         { path: "404", name: "404", meta: { title: "页面不存在" }, component: () => import("../views/404.vue")},
         { path: ':pathMatch(.*)*', redirect: '/404'},
       ] },
