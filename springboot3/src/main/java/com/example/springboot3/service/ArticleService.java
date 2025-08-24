@@ -51,4 +51,8 @@ public class ArticleService {
             this.delete(id);
         }
     }
+
+    public Integer selectCountByDate(String dayFormat) {
+        return articleMapper.selectCountByDate(dayFormat);
+    }
 }

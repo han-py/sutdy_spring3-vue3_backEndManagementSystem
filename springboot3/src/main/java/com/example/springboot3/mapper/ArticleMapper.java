@@ -23,4 +23,7 @@ public interface ArticleMapper {
     void deleteById(Integer id);
 
     Article selectByUsername(String username);
+
+    @Select("select count(*) from `article` where time like '%${dayFormat}'")
+    Integer selectCountByDate(String dayFormat);
 }
