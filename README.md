@@ -691,3 +691,129 @@ const importSuccess = (res) => {
 }
 ```
 ***
+### SpringBoot3+Vue3实现数据统计图表功能
+#### Ecahrts 官网 https://echarts.apache.org/zh/index.html
+### 安装使用 Echarts
+```
+npm i echarts -S
+```
+##### dom 容器
+```
+<div style="width=600px; height=400px" id="main"></div>
+```
+```
+import * as echarts from 'echarts';
+
+const option = {
+  title: {
+    text: 'ECharts 入门示例'
+  },
+  tooltip: {},
+  legend: {
+    data: ['销量']
+  },
+  xAxis: {
+    data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+  },
+  yAxis: {},
+  series: [
+    {
+      name: '销量',
+      type: 'bar',
+      data: [5, 20, 36, 10, 10, 20]
+    }
+  ]
+};
+  
+// 基于准备好的dom，初始化echarts实例
+const myChart = echarts.init(document.getElementById('main'))
+  // 使用刚指定的配置项和数据显示图表。
+myChart.setOption(option);
+```
+#### 注意：必须在 dom 准备好的时候再去设置初始化 ecahrts 示例
+##### 引入 onMouted
+```
+import { reactive, onMounted } from "vue";
+
+  
+// onMounted 表示页面的所有dom元素都初始化完成了
+onMounted(() => {
+  // 基于准备好的dom，初始化echarts实例
+  const myChart = echarts.init(document.getElementById('main'))
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+})
+```
+#### 柱状图
+```
+@GetMapping("/barData")
+public Result getBarData() {
+    Map<String, Object> map = new HashMap<>();
+    List<Employee> employeeList = employeeService.selectAll(null);
+    Set<String> departmentNameSet = employeeList.stream().map(Employee::getDepartmentName).collect(Collectors.toSet());
+    map.put("department", departmentNameSet);  // x轴数据
+    List<Long> countList = new ArrayList<>();
+    for (String departmentName : departmentNameSet) {
+        // 统计这个部门下面的员工的数量
+        long count = employeeList.stream().filter(employee -> employee.getDepartmentName().equals(departmentName)).count();
+        countList.add(count);
+    }
+    map.put("count", countList);  // y轴员工数量的数据
+    return Result.success(map);
+}
+```
+##### 设置颜色
+```
+itemStyle: {
+    normal: {
+      color: function () {
+        return "#" + Math.floor(Math.random() * (256 * 256 * 256 - 1)).toString(16);
+      }
+    },
+},
+```
+### 折线图
+```
+@GetMapping("/lineData")
+public Result getLineData() {
+    Map<String, Object> map = new HashMap<>();
+
+    Date date = new Date();  // 今天当前的时间
+    DateTime start = DateUtil.offsetDay(date, -7); // 起始日期
+    List<DateTime> dateTimeList = DateUtil.rangeToList(start, date, DateField.DAY_OF_YEAR);
+    // 把 DateTime 类型的日期转换成  字符串类型的日期  ["10月22日", "10月23日"...]
+    List<String> dateStrList = dateTimeList.stream().map(dateTime -> DateUtil.format(dateTime, "MM月dd日"))
+            .sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+    map.put("date", dateStrList);  // x轴数据
+
+    List<Integer> countList = new ArrayList<>();
+    for (DateTime day : dateTimeList) {
+        // 10月22日
+        String dayFormat = DateUtil.formatDate(day);  // 2023-10-22
+        // 获取当天所有的发布的文章的数量
+        Integer count = articleService.selectCountByDate(dayFormat);
+        countList.add(count);
+    }
+    map.put("count", countList);  // y轴发布文章的数量数据
+    return Result.success(map);
+}
+```
+### 饼图
+```
+@GetMapping("/pieData")
+public Result getPieData() {
+    List<Map<String, Object>> list = new ArrayList<>();
+    List<Employee> employeeList = employeeService.selectAll(null);
+    Set<String> departmentNameSet = employeeList.stream().map(Employee::getDepartmentName).collect(Collectors.toSet());
+    for (String departmentName : departmentNameSet) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", departmentName);
+        // 统计这个部门下面的员工的数量
+        long count = employeeList.stream().filter(employee -> employee.getDepartmentName().equals(departmentName)).count();
+        map.put("value", count);
+        list.add(map);
+    }
+    return Result.success(list);
+}
+```
+***
